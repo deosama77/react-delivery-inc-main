@@ -1,0 +1,116 @@
+
+.Item{
+    padding: 3px;
+}
+.Container{
+   padding: 70px 25px 70px 50px;
+   margin: auto;
+   
+
+}
+
+.Header {
+    padding-top: 10px;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.Header_Left{
+    padding: 20px 16px;
+    text-align: left;
+    
+
+}
+.Header_right{
+    padding: 20px 16px;
+    text-align: left;
+}
+.Invoice_Header{
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;  
+}
+
+.Invoice_Header_Id{
+    text-align: left;
+     width: 30px;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+.Invoice_Header_Weight{
+    text-align: left;
+    width: 100px;
+    padding-top: 10px;
+    padding-bottom: 25px;    
+}
+.Invoice_Header_Price{
+    background-color: rgb(230, 225, 225);
+    padding-top: 10px;
+    padding-bottom: 25px;
+    padding-right: 100px;
+    padding-left: 15px;
+    width: 43px;
+}
+
+
+.Invoice_Content_Row{
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+   
+}
+
+.Invoice_Content_Id{
+    width: 30px;
+   text-align: left;
+}
+
+.Invoice_Content_Weight{
+text-align: left;
+width: 100px;
+}
+
+.Invoice_Content_Price_Row{
+    margin: 0px;
+    background-color: rgb(230, 225, 225);
+    padding-bottom: 10px;
+    padding-left: 15px;
+    width: 143px;
+    text-align: left;
+    
+    
+}
+.Invoice_Content_Id_Total_Row{
+    width: 30px;
+}
+.Invoice_Content_Price_Total_Row{
+    margin: 0px;
+    background-color: rgb(230, 225, 225);
+    padding-bottom: 10px;
+
+    padding-left: 15px;
+    width: 143px;
+    text-align: left;
+    
+}
+
+.Invoice_Content_Weight_Total_Row{
+    padding-bottom: 10px;
+    text-align: left;
+    width: 100px;
+}
+
+.Footer{
+    margin-top: 60px;
+    
+}
+
+

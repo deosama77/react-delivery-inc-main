@@ -1,0 +1,12 @@
+.formGroupPackage{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Error{
+    color: red;
+    padding: 3px;
+    font-size: 16;
+    display: block;
+}
