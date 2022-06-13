@@ -36,3 +36,20 @@ export const generateNewId = (packages) => {
   const newId = ids[ids.length - 1] + 1;
   return newId;
 };
+
+export const getHeighestOrder=(packages)=>{
+  const shippingOrders = packages
+  .map((p) => p.shippingOrder)
+  .sort((a, b) => a - b);
+const shippingOrder = shippingOrders[shippingOrders.length - 1];
+return shippingOrder;
+}
+
+export const getLowestOrder=(packages)=>{
+  const shippingOrders = packages
+  .map((p) => p.shippingOrder)
+  .sort((a, b) => a - b);
+
+const shippingOrder = shippingOrders[0];
+return shippingOrder;
+}

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -14,12 +14,16 @@ import AddModalPackage from "./AddModalPackage";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MenuShippingOrder from "./MenuShippingOrder";
 import {Appcontext} from '../../contexts/MyProvider';
+import { getHeighestOrder, getLowestOrder } from "../../Functions";
 
 function PackageList() {
   const {appData , handleOrderPackages , handleDeltePackage} =useContext(Appcontext);
   const [openAddModal, setOpenAddModal] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [id,setId]=useState(0);
+  const [isH,setIsH]=useState(false);
+  const [isL,setIsL]=useState(false);
   
 
   const handleClickOpen = () => {
@@ -27,15 +31,21 @@ function PackageList() {
   };
 
 
-  const handleClick = (event) => {
+  const handleClick = (event,id) => {
     setAnchorEl(event.currentTarget);
+  const h=  getHeighestOrder(appData.packages);
+  const l= getLowestOrder(appData.packages);
+  const currentp=appData.packages.find(p=>p.id===id)
+  setIsH(currentp.shippingOrder ===h ? true:false);
+  setIsL(currentp.shippingOrder ===l ? true:false)
+  setId(id)
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const handleClickOrder =(option)=>{
-       handleOrderPackages(option);
+      handleOrderPackages(option,id);
        handleClose();
   }
   return (
@@ -69,11 +79,12 @@ function PackageList() {
           </TableHead>
           <TableBody>
             {appData.packages &&
-              appData.packages.map((row) => {
+              appData.packages.map((row,i) => {
+                
                 return (
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    key={row.id}
+                    key={row.id+i}
                   >
                     <TableCell component="th" scope="row">
                       {row.id}
@@ -94,11 +105,13 @@ function PackageList() {
                         aria-controls={open ? "long-menu" : undefined}
                         aria-expanded={open ? "true" : undefined}
                         aria-haspopup="true"
-                        onClick={handleClick}
+                        onClick={(e)=>handleClick(e,row.id)}
                       >
                         <MoreVertIcon />
                       </IconButton>
                       <MenuShippingOrder
+                      isHeigher={isH}
+                      isLowest={isL}
                       anchorEl={anchorEl}
                       open={open}
                       handleClose={handleClose}
