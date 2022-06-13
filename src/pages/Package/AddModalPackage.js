@@ -43,7 +43,7 @@ function AddModalPackage({ openAddModal, setOpenAddModal }) {
     } else {
       setCustomerError(false);
     }
-    if (!weight || !Number(weight)) {
+    if (!weight || !Number(weight)||weight<=0) {
       // "Weight is required as number!"
       setWeightError(true);
 
@@ -51,7 +51,7 @@ function AddModalPackage({ openAddModal, setOpenAddModal }) {
     } else {
       setWeightError(false);
     }
-    if (!price || !Number(price)) {
+    if (!price || !Number(price)||price<=0) {
       setPriceError(true);
 
       return;
@@ -126,7 +126,7 @@ function AddModalPackage({ openAddModal, setOpenAddModal }) {
                 setWeightError(false);
               }
             }}
-            helperText="Weight is required as number"
+            helperText="Weight must be a number and greater than 0"
           />
 
           <TextField
@@ -144,7 +144,7 @@ function AddModalPackage({ openAddModal, setOpenAddModal }) {
                 setPriceError(false);
               }
             }}
-            helperText="Price is required as number"
+            helperText="Price must be a number and greater than 0"
           />
         </Box>
       </DialogContent>
