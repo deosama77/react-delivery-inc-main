@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -13,9 +13,10 @@ import Paper from "@mui/material/Paper";
 import AddModalPackage from "./AddModalPackage";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MenuShippingOrder from "./MenuShippingOrder";
+import {Appcontext} from '../../contexts/MyProvider';
 
-function PackageList({ packages, customers, setAppData }) {
-  const [uPackages, setUPackages] = useState(packages || {});
+function PackageList() {
+  const {appData , handleOrderPackages , handleDeltePackage} =useContext(Appcontext);
   const [openAddModal, setOpenAddModal] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -24,22 +25,6 @@ function PackageList({ packages, customers, setAppData }) {
   const handleClickOpen = () => {
     setOpenAddModal(true);
   };
-
-  const handleDelte = (id) => {
-    const filteredPackages = packages.filter((p) => p.id !== id);
-    setAppData({ customers: [...customers], packages: filteredPackages });
-  };
-
-  useEffect(() => {
-    if (customers && packages) {
-      const newPakcges = packages.map((p) => ({
-        ...p,
-        customer: customers.find((c) => c.id === p.customerid),
-      }));
-      setUPackages(newPakcges);
-    }
-  }, [setUPackages, packages, customers]);
-
 
 
   const handleClick = (event) => {
@@ -50,13 +35,7 @@ function PackageList({ packages, customers, setAppData }) {
   };
 
   const handleClickOrder =(option)=>{
-       if(option==="Order Up"){
-         const reOrder=uPackages.sort((a,b)=>a.shippingOrder-b.shippingOrder);
-         setUPackages(reOrder);
-       }else{
-        const reOrder=uPackages.sort((a,b)=>b.shippingOrder-a.shippingOrder);
-        setUPackages(reOrder);
-       }
+       handleOrderPackages(option);
        handleClose();
   }
   return (
@@ -64,9 +43,7 @@ function PackageList({ packages, customers, setAppData }) {
       <AddModalPackage
         openAddModal={openAddModal}
         setOpenAddModal={setOpenAddModal}
-        setAppData={setAppData}
-        customers={customers}
-        packages={packages}
+      
       />
 
       <TableContainer component={Paper}>
@@ -91,8 +68,8 @@ function PackageList({ packages, customers, setAppData }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {uPackages &&
-              uPackages.map((row) => {
+            {appData.packages &&
+              appData.packages.map((row) => {
                 return (
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -107,7 +84,7 @@ function PackageList({ packages, customers, setAppData }) {
                     <TableCell>
                       <Button
                         variant="contained"
-                        onClick={() => handleDelte(row.id)}
+                        onClick={() => handleDeltePackage(row.id)}
                       >
                         Delete
                       </Button>

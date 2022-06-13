@@ -1,12 +1,14 @@
   //   get invoices from customers and packages
 export const getInvoices = (data) => {
-  const groupCustomers = data.customers.map((c) => {
+    const groupCustomers = data.customers.map((c) => {
     const customPackages = data.packages.filter((p) => p.customerid === c.id);
+    if(customPackages.length<=0){
+       return {...c};
+    }
     const customPrice = customPackages.reduce((total, p) => total + p.price, 0);
     const customWeight = customPackages.reduce(
       (total, p) => total + Number(p.weight.slice(0, -2)),
-      0
-    );
+      0);
     return {
       ...c,
       package: {

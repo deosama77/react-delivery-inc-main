@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,8 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useHistory } from "react-router-dom";
+import {Appcontext} from '../../contexts/MyProvider';
 
-function CustomerList({customers , onDelete}) {
+function CustomerList() {
+  const {appData , onDeleteCustomer} = useContext(Appcontext);
   let history = useHistory();
     return (
         <TableContainer component={Paper}>
@@ -26,7 +28,7 @@ function CustomerList({customers , onDelete}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers&&customers.map((row) => {
+            {appData.customers&&appData.customers.map((row) => {
 
               return (
                 <TableRow
@@ -40,7 +42,7 @@ function CustomerList({customers , onDelete}) {
                   <TableCell ><Button variant="contained" onClick={()=>{
                     history.push(`/exercise-invoice/${row.id}`);
                   }}>Create Invoice</Button></TableCell>
-                  <TableCell ><Button variant="contained" onClick={()=>onDelete(row.id)}>Delete</Button></TableCell>
+                  <TableCell ><Button variant="contained" onClick={()=>onDeleteCustomer(row.id)}>Delete</Button></TableCell>
                 </TableRow>
               )
             })}

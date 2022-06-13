@@ -1,9 +1,9 @@
 import React from 'react';
 import CustomerList from './CustomerList';
 
-function Customer({customers , onDelete}) {
+function Customer() {
     return (
-        <CustomerList customers={customers} onDelete={onDelete}/>
+        <CustomerList/>
     );
 }
 

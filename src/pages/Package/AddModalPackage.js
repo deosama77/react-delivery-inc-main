@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -11,43 +11,57 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Box } from "@mui/material";
 import { generateNewId, generateShippingOrder } from "../../Functions";
+import { Appcontext } from "../../contexts/MyProvider";
 
-function AddModalPackage({
-  openAddModal,
-  setOpenAddModal,
-  setAppData,
-  customers,
-  packages,
-}) {
+function AddModalPackage({ openAddModal, setOpenAddModal }) {
+  const { appData, addNewPackage } = useContext(Appcontext);
   const [customer, setCustomer] = useState("");
   const [weight, setWeight] = useState("");
   const [price, setPrice] = useState("");
-  const [error, setError] = useState("");
+
+  const [customerError, setCustomerError] = useState(false);
+  const [weightError, setWeightError] = useState(false);
+  const [priceError, setPriceError] = useState(false);
 
   const handleClose = () => {
     setOpenAddModal(false);
-    setError("");
+
     setWeight("");
     setPrice("");
-    setCustomer("")
+    setCustomer("");
+    setWeightError(false);
+    setPriceError(false);
+    setCustomerError(false);
   };
 
   const handleSubmit = () => {
-      if(!customer){
-          setError("Customer is required !")
-          return;
-      }
-      if(!weight||!Number(weight)){
-        setError("Weight is required as number!")
-        return;
+    if (!customer) {
+      // "Customer is required !"
+      setCustomerError(true);
+
+      return;
+    } else {
+      setCustomerError(false);
     }
-    if(!price||!Number(price)){
-        setError("Price is required as number!")
-        return;
+    if (!weight || !Number(weight)) {
+      // "Weight is required as number!"
+      setWeightError(true);
+
+      return;
+    } else {
+      setWeightError(false);
     }
-    const newId = generateNewId(packages);
+    if (!price || !Number(price)) {
+      setPriceError(true);
+
+      return;
+    } else {
+      setPriceError(false);
+    }
+
+    const newId = generateNewId(appData.packages);
     //  generate shipping order
-    const shippingOrder = generateShippingOrder(packages);
+    const shippingOrder = generateShippingOrder(appData.packages);
 
     const packagesObject = {
       id: "pak" + newId,
@@ -55,14 +69,10 @@ function AddModalPackage({
       customerid: Number(customer),
       price: Number(price),
       shippingOrder: shippingOrder,
+      customer: appData.customers.find((c) => c.id === customer),
     };
-    setAppData({
-      customers: [...customers],
-      packages: [...packages, packagesObject],
-    });
- 
+    addNewPackage(packagesObject);
     handleClose();
-  
   };
 
   return (
@@ -70,10 +80,14 @@ function AddModalPackage({
       <DialogContent>
         <DialogContentText style={{ minWidth: 400, textAlign: "center" }}>
           Add new Package
-          <span className="Error">{error ? error :""}</span>
+            <span className="Error">{(customerError || weightError || priceError)&&"Error !!!"}</span>
         </DialogContentText>
         <Box className="formGroupPackage">
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
+          <FormControl
+            variant="standard"
+            sx={{ m: 1, minWidth: 300 }}
+            error={customerError}
+          >
             <InputLabel id="demo-simple-select-standard-label">
               Customer
             </InputLabel>
@@ -81,16 +95,24 @@ function AddModalPackage({
               labelId="demo-simple-select-standard-label"
               id="demo-simple-select-standard"
               value={customer}
-              onChange={(e) => setCustomer(e.target.value)}
+              onChange={(e) => {
+                setCustomer(e.target.value);
+                if (customer) {
+                  setCustomerError(false);
+                }
+              }}
               label="Customer"
-            >{customers &&
-                customers.map((c,i) => (
-                  <MenuItem value={c.id} key={c.id+i}>{c.name}</MenuItem>
+            >
+              {appData.customers &&
+                appData.customers.map((c, i) => (
+                  <MenuItem value={c.id} key={c.id + i}>
+                    {c.name}
+                  </MenuItem>
                 ))}
             </Select>
           </FormControl>
           <TextField
-         
+            error={weightError}
             margin="dense"
             id="weight"
             label="ًWeight"
@@ -98,11 +120,17 @@ function AddModalPackage({
             variant="standard"
             style={{ minWidth: 300 }}
             value={weight}
-            onChange={(e) => setWeight(e.target.value)}
+            onChange={(e) => {
+              setWeight(e.target.value);
+              if (weight && Number(weight)) {
+                setWeightError(false);
+              }
+            }}
+            helperText="Weight is required as number"
           />
 
           <TextField
-            
+            error={priceError}
             margin="dense"
             id="price"
             label="Price"
@@ -110,7 +138,13 @@ function AddModalPackage({
             variant="standard"
             style={{ minWidth: 300 }}
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              setPrice(e.target.value);
+              if (price && Number(price)) {
+                setPriceError(false);
+              }
+            }}
+            helperText="Price is required as number"
           />
         </Box>
       </DialogContent>
